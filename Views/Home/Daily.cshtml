@@ -1,0 +1,72 @@
+﻿@model IEnumerable<TIM.Lib.Model.BookTransaction>
+
+@{
+    ViewData["Title"] = "Daily";
+}
+
+<h1>Daily</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BorrowDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpectedReturnDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActualReturnDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Book)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Member)
+            </th>
+            <th>Charges</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BorrowDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExpectedReturnDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActualReturnDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book.Author)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Member.LastName)
+                </td>
+                <td>
+                    @{
+                        var actualReturn = item.ActualReturnDate.Value.DateTime;
+                        var expReturn = item.ExpectedReturnDate.DateTime;
+                        int daysLate = (actualReturn > expReturn ? (int)(actualReturn - expReturn).TotalDays : 0);
+                        decimal lateCharges = 0;
+                        int previousCoeff = 0;
+                        int a = 0, b = 1, c = 0;  
+
+                        for (int i = 1; i < daysLate; i++)
+                        {
+                            c= a + b;  
+                            lateCharges += 0.2m * c;
+                            a= b;  
+                            b= c; 
+                        }
+
+                        @lateCharges
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+</div>
+<div class="row">
+    <div>
+        <div class="form-group">
+            <label for="inputBookName">Name of Book</label>
+            <input type="text" class="form-control" id="inputBookName" aria-describedby="bookHelp" placeholder="Book Name">
+            <small id="bookHelp" class="form-text text-muted">Please enter name of the book or leave empty</small>
+        </div>
+        <div class="form-group">
+            <label for="inputAuthorName">Author Name</label>
+            <input type="text" class="form-control" id="inputAuthorName" aria-describedby="AuthorNameHelp" placeholder="Author Name">
+            <small id="AuthorNameHelp" class="form-text text-muted">Please enter Author name of the book</small>
+        </div>
+
+        <div class="form-group">
+            <label for="inputIsbn">ISBN</label>
+            <input type="text" class="form-control" id="inputIsbn" aria-describedby="IsbnHelp" placeholder="ISBN">
+            <small id="IsbnHelp" class="form-text text-muted">Please enter ISBN of the book</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</div>
+<div class="row"></div>
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <div class=col-12>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">ISBN</th>
+                            <th scope="col">Author</th>
+                    </thead>
+                    <tbody>
+                        @*                        <tr>
+                            <td>
+                            asdasdas
+                            </td>
+                            <td>
+                            asdasdas
+                            </td>
+                            </tr>*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section Scripts
+{
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+
+    $('button.btn-primary').click(_ => {
+
+        var name = $('input#inputBookName').val();
+        var   authorName = $('input#inputAuthorName').val();
+        var isbn = $('input#inputIsbn').val();
+
+              $.ajax({
+               url: '/Home/Search',
+               type: 'POST',
+               dataType: 'json',
+               contentType: 'application/json',               
+               data:JSON.stringify(                   
+                   {
+                   name:name,
+                   authorName:authorName,
+                   isbn: isbn
+               }),
+               success: function (response) {
+
+                   $.each(response,function(i,j)
+                   {
+                       $('table tbody').append('<tr><td>'+j.name+'</td><td>'+j.isbn+'</td><td>'+j.author+'</td></tr>');
+                   });
+               },
+               error: function (hata) {
+
+
+               }
+
+              });
+
+          });
+      }
+      );
+
+</script>
+}
